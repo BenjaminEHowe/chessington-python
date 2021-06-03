@@ -12,6 +12,7 @@ class Piece(ABC):
     """
 
     def __init__(self, player):
+        self.move_count = 0
         self.player = player
 
     @abstractmethod
@@ -27,6 +28,7 @@ class Piece(ABC):
         """
         current_square = board.find_piece(self)
         board.move_piece(current_square, new_square)
+        self.move_count += 1
 
 
 class Pawn(Piece):
@@ -42,13 +44,20 @@ class Pawn(Piece):
 
     def get_available_moves(self, board):
         current_square = board.find_piece(self)
-
-        return [
+        available_moves = [
             Square.at(
                 current_square.row + self._get_direction(),
                 current_square.col
             )
         ]
+        if self.move_count == 0:
+            available_moves.append(
+                Square.at(
+                    current_square.row + (self._get_direction() * 2),
+                    current_square.col
+                )
+            )
+        return available_moves
 
 
 class Knight(Piece):
