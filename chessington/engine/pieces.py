@@ -4,6 +4,7 @@ Definitions of each of the different chess pieces.
 
 from abc import ABC, abstractmethod
 
+from chessington.engine.constants import BOARD_SIZE
 from chessington.engine.data import Player, Square
 
 class Piece(ABC):
@@ -60,6 +61,10 @@ class Pawn(Piece):
         
         return [
             square for square in available_moves if
+                square.col >= 0 and
+                square.col < BOARD_SIZE and
+                square.row >= 0 and
+                square.row < BOARD_SIZE and
                 not board.get_piece(square_in_front) and
                 not board.get_piece(square)
         ]
