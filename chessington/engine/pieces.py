@@ -44,12 +44,12 @@ class Pawn(Piece):
 
     def get_available_moves(self, board):
         current_square = board.find_piece(self)
-        available_moves = [
-            Square.at(
+        square_in_front = Square.at(
                 current_square.row + self._get_direction(),
                 current_square.col
             )
-        ]
+
+        available_moves = [square_in_front]
         if self.move_count == 0:
             available_moves.append(
                 Square.at(
@@ -57,7 +57,12 @@ class Pawn(Piece):
                     current_square.col
                 )
             )
-        return available_moves
+        
+        return [
+            square for square in available_moves if
+                not board.get_piece(square_in_front) and
+                not board.get_piece(square)
+        ]
 
 
 class Knight(Piece):
@@ -66,7 +71,8 @@ class Knight(Piece):
     """
 
     def get_available_moves(self, board):
-        return []
+        available_moves = []
+        return [square for square in available_moves if not board.get_piece(square)]
 
 
 class Bishop(Piece):
